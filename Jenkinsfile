@@ -3,10 +3,11 @@ node
 def mavenHome = tool name: "maven3.8.5"
 properties([buildDiscarder(logRotator(artifactDaysToKeepStr: '5', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5')), [$class: 'JobLocalConfiguration', changeReasonComment: ''], pipelineTriggers([pollSCM('* * * * *')])]) 
 echo "the job name is: ${env.JOB_NAME}"  
-stage('code'){
+ try {
+ stage('code'){
 git branch: 'development', credentialsId: 'f6282c52-f5e2-40a4-a24b-62e00fe05253', url: 'https://github.com/mithunsoftware/maven-web-application.git'
 }
- try{
+ 
 stage('Build'){
 sh "${mavenHome}/bin/mvn clean package"
 }
@@ -39,7 +40,7 @@ slacknotification(currentBuild.result)
   
 }//node closing
 
-def notifyBuild(String buildStatus = 'STARTED') {
+def slacknotification(String buildStatus = 'STARTED') {
   
   buildStatus =  buildStatus ?: 'SUCCESSFUL'
 
