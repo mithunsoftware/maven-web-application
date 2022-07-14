@@ -33,11 +33,12 @@ catch(e){
 currentbuild.result = "FAILED"
 throw e 
 } 
- finally{
- slacknotification(currentBuild.result)
- }
+finally{
+slacknotification(currentBuild.result)
+}
   
- }//node closing
+}//node closing
+
 def notifyBuild(String buildStatus = 'STARTED') {
   
   buildStatus =  buildStatus ?: 'SUCCESSFUL'
